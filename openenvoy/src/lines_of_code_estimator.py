@@ -1,5 +1,6 @@
 import os.path
 import sys
+
 """
 Lines of code estimator
     - Blank lines
@@ -9,17 +10,15 @@ Lines of code estimator
     
  @author: Sekhar P
 """
-from src.estimators import JavaLinesOfCodeEstimator, PythonLinesOfCodeEstimator
-import estimator_mapping
+from src.estimators import JavaLinesOfCodeEstimator
 
 class Estimator:
-    def exists(self, path):
-        if os.path.exists(path):
-            return True
-        else:
-            return False
 
     def find_lines(self):
+        """
+        finds lines with blanks, comments
+        :return:
+        """
         file_paths = []
         for i in range(1, len(sys.argv)):
             file_paths.append(sys.argv[i])
@@ -30,9 +29,10 @@ class Estimator:
 
         print("Finding lines of code \n")
         for path in file_paths:
-            if not self.exists(path):
-                print("Provided file path does not exists")
-            estimator = estimator_mapping[path.split('.')[-1]]
+            if path.endswith('.java'):
+                estimator = JavaLinesOfCodeEstimator(path)
+            else:
+                print("We do not have an implementation provided for this type of file")
 
             print("{}".format(path))
             print(' - Blank lines: ', estimator.noOfBlankLines())
@@ -43,6 +43,6 @@ class Estimator:
 
             print('\n')
 
+
 if __name__ == '__main__':
     Estimator().find_lines()
-

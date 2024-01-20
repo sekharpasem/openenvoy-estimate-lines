@@ -1,6 +1,6 @@
 class DefaultLinesOfCodeEstimator:
 
-    def __init__(self, path, config):
+    def __init__(self, path):
         """
         path: path of the file
 
@@ -156,64 +156,6 @@ class JavaLinesOfCodeEstimator(DefaultLinesOfCodeEstimator):
                 is_comment = True
                 count += 1
             elif line.strip().endswith('*/') and is_comment:
-                is_comment = False
-                count += 1
-            elif is_comment:
-                count += 1
-        return count
-
-
-class PythonLinesOfCodeEstimator(DefaultLinesOfCodeEstimator):
-
-    def noOfCommentLines(self):
-        """
-        Returns the number of comment lines in the file
-        """
-        try:
-            lines = self.readFile()
-            count = 0
-            for line in lines:
-                if line.strip().startswith('//'):
-                    count += 1
-            return count
-        except FileNotFoundError as e:
-            print(e)
-            raise ValueError('Invalid file path')
-
-    def noOfCodeLines(self):
-        """
-        Returns the number of code lines in the file
-
-        """
-
-        try:
-            lines = self.readFile()
-            count = 0
-            for line in lines:
-                if not line.strip().startswith('//') \
-                        and not line.strip().startswith('"""') \
-                        and not line.strip().startswith('*') \
-                        and not line.strip().startswith('/*') \
-                        and line.strip() != '':
-                    count += 1
-            return count
-        except FileNotFoundError as e:
-            print(e)
-            raise ValueError('Invalid file path')
-
-    def noOfMultiLineCommentLines(self):
-        """
-        Returns the number of multi line comment lines in the file, there might be multiple block starting with 3 " and ending with 3 "
-        """
-
-        lines = self.readFile()
-        count = 0
-        is_comment = False
-        for line in lines:
-            if line.strip().startswith('"""') and not is_comment:
-                is_comment = True
-                count += 1
-            elif line.strip().endswith('"""') and is_comment:
                 is_comment = False
                 count += 1
             elif is_comment:
